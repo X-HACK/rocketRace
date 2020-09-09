@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,18 +11,22 @@
         margin: 0;
         padding: 0;
     }
+
     label {
         display: block;
     }
+
     p {
         margin: 0;
     }
+
     .bg-image {
         background-image: url("https://co-jin.net/wp-content/uploads/2014/07/we_own_the_sky_by_mediumanalog.jpg");
         background-size: 100% 100%;
         width: 100%;
         height: 100vh;
     }
+
     .bg-race {
         position: absolute;
         top: 50px;
@@ -33,22 +38,27 @@
         color: white;
         font-size: 50px;
     }
-    .bg-race > span {
+
+    .bg-race>span {
         position: absolute;
         font-size: 50px;
     }
-    .bg-race > span:nth-child(1){
+
+    .bg-race>span:nth-child(1) {
         top: 630px;
         left: 70px;
     }
-    .bg-race > span:nth-child(2){
+
+    .bg-race>span:nth-child(2) {
         top: 630px;
         left: 270px;
     }
-    .bg-race > span:nth-child(3){
+
+    .bg-race>span:nth-child(3) {
         top: 630px;
         left: 470px;
     }
+
     .line {
         position: absolute;
         left: 400px;
@@ -57,17 +67,21 @@
         width: 600px;
         text-align: center;
     }
+
     .line--start {
         top: 650px;
     }
+
     .line--goal {
         top: 100px;
     }
+
     .btn-start {
         position: absolute;
         top: 50%;
         left: 45%;
     }
+
     .expect-list {
         position: absolute;
         top: 50px;
@@ -81,6 +95,7 @@
         padding: 10px;
         text-align: center;
     }
+
     .result {
         position: absolute;
         top: 100px;
@@ -93,6 +108,7 @@
         writing-mode: vertical-rl;
     }
 </style>
+
 <body>
     <div class="bg-image">
         <form id="expect-list" class="expect-list">
@@ -119,205 +135,206 @@
         <div id="result" class="result"></div>
     </div>
 
-<script>
+    <script>
 
-class GameManager {
-    constructor() {
-        this.racerList = []
-        this.goalList = []
-        this.expect = null
-        this.goal = null
-        this.btnFlg = true
-    }
-
-    addRacer(racer) {
-        this.racerList.push(racer);
-    }
-    addGoal(racerNum) {
-        this.goal = racerNum;
-    }
-    addExpect(expectNum) {
-        this.expect = expectNum;
-    }
-}
-class Racer {
-    constructor(positionY, positionX) {
-        this.positionY = positionY
-        this.positionX = positionX
-        this.src = "https://frame-illust.com/fi/wp-content/uploads/2017/05/rocket-red.png"
-    }
-}
-class ExepectField {
-    constructor() {
-        this.expect = null
-    }
-
-    addExpect(num) {
-        this.expect = num;
-    }
-}
-
-let expectField = new ExepectField()
-
-let racer1 = new Racer(680, 450)
-let racer2 = new Racer(680, 650)
-let racer3 = new Racer(680, 850)
-
-let gameManager = new GameManager()
-gameManager.addRacer(racer1)
-gameManager.addRacer(racer2)
-gameManager.addRacer(racer3)
-
-////////////////////////
-// イベント
-////////////////////////
-const btn = document.getElementById('btn');
-const result = document.getElementById('result')
-
-window.addEventListener("DOMContentLoaded", () => {
-    const chars = gameManager.racerList;
-    // イメージ初期描画
-    appendImg(chars)
-})
-
-
-btn.addEventListener("click", () => {
-    //バリデーション
-    if(expectField.expect === null){
-        result.innerHTML = "予想してください"
-        return;
-    }
-
-    if(gameManager.btnFlg) {
-        // レーススタート
-        startRace();
-        btn.innerText = "リセット";
-        gameManager.btnFlg = false;
-    } else {
-        init();
-        btn.innerText = "スタート";
-        gameManager.btnFlg = true;
-    }
-})
-
-let radioId = document.getElementById('expect-list');
-// 選択したvalueをexpectFieldクラスに仮格納
-radioId.addEventListener("change", (e) => {
-    result.innerHTML = ""
-    let expectNum = Number(e.target.value)
-    expectField.addExpect(expectNum)
-    console.log(expectField.expect)
-})
-////////////////////////
-// 関数
-////////////////////////
-function startRace() {
-    //expectFieldの仮格納をgameManagerに格納して確定
-    gameManager.addExpect(expectField.expect)
-    // ゴールの座標取得
-    const goal = document.getElementById('goal');
-    let clientG = goal.getBoundingClientRect();
-    let y = clientG.y
-
-    // 座標再代入・再描画関数ループ
-    let timerId = setInterval( () => {
-        // 再代入前のオブジェクト削除
-        clearObj();
-        // 距離再代入
-        gameManager.racerList.forEach( (char, index) => {
-            let positionYnum = char.positionY - (1 + Math.random() * 10)
-            char.positionY = positionYnum
-
-            // レーサー座標がゴール座標より小さくなれば止める
-            if(char.positionY + 90 < y) {
-                clearInterval(timerId);
-                gameManager.addGoal(index)
-                if(gameManager.expect === gameManager.goal) {    
-                    result.innerHTML = "当たり！！"
-                } else {
-                    result.innerHTML = "ハズレ！！"
-                }
+        class GameManager {
+            constructor() {
+                this.racerList = []
+                this.goalList = []
+                this.expect = null
+                this.goal = null
+                this.btnFlg = true
             }
 
+            addRacer(racer) {
+                this.racerList.push(racer);
+            }
+            addGoal(racerNum) {
+                this.goal = racerNum;
+            }
+            addExpect(expectNum) {
+                this.expect = expectNum;
+            }
+        }
+        class Racer {
+            constructor(positionY, positionX) {
+                this.positionY = positionY
+                this.positionX = positionX
+                this.src = "https://frame-illust.com/fi/wp-content/uploads/2017/05/rocket-red.png"
+            }
+        }
+        class ExepectField {
+            constructor() {
+                this.expect = null
+            }
+
+            addExpect(num) {
+                this.expect = num;
+            }
+        }
+
+        let expectField = new ExepectField()
+
+        let racer1 = new Racer(680, 450)
+        let racer2 = new Racer(680, 650)
+        let racer3 = new Racer(680, 850)
+
+        let gameManager = new GameManager()
+        gameManager.addRacer(racer1)
+        gameManager.addRacer(racer2)
+        gameManager.addRacer(racer3)
+
+        ////////////////////////
+        // イベント
+        ////////////////////////
+        const btn = document.getElementById('btn');
+        const result = document.getElementById('result')
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const chars = gameManager.racerList;
+            // イメージ初期描画
+            appendImg(chars)
         })
 
-        //racerListオブジェクト再代入
-        gameManager.racerList.length = 0
-        setRacerGroup()
 
-        // 再描画
-        const chars = gameManager.racerList;
-        appendImg(chars)
+        btn.addEventListener("click", () => {
+            //バリデーション
+            if (expectField.expect === null) {
+                result.innerHTML = "予想してください"
+                return;
+            }
 
-    }, 100)
-}
-// 描画関数
-function appendImg(chars) {
+            if (gameManager.btnFlg) {
+                // レーススタート
+                startRace();
+                btn.innerText = "リセット";
+                gameManager.btnFlg = false;
+            } else {
+                init();
+                btn.innerText = "スタート";
+                gameManager.btnFlg = true;
+            }
+        })
 
-chars.forEach( char => {
+        let radioId = document.getElementById('expect-list');
+        // 選択したvalueをexpectFieldクラスに仮格納
+        radioId.addEventListener("change", (e) => {
+            result.innerHTML = ""
+            let expectNum = Number(e.target.value)
+            expectField.addExpect(expectNum)
+            console.log(expectField.expect)
+        })
+        ////////////////////////
+        // 関数
+        ////////////////////////
+        function startRace() {
+            //expectFieldの仮格納をgameManagerに格納して確定
+            gameManager.addExpect(expectField.expect)
+            // ゴールの座標取得
+            const goal = document.getElementById('goal');
+            let clientG = goal.getBoundingClientRect();
+            let y = clientG.y
 
-  let x = document.createElement('img');
+            // 座標再代入・再描画関数ループ
+            let timerId = setInterval(() => {
+                // 再代入前のオブジェクト削除
+                clearObj();
+                // 距離再代入
+                gameManager.racerList.forEach((char, index) => {
+                    let positionYnum = char.positionY - (1 + Math.random() * 10)
+                    char.positionY = positionYnum
 
-  x.src = char.src;
-  x.style.width = "100px"
-  x.style.height = "100px"
-  x.style.marginRight = "20px"
-  x.style.position = "absolute"
-  x.style.top = char.positionY + "px";
-  x.style.left = char.positionX + "px";
-  x.style.zIndex = 2;
+                    // レーサー座標がゴール座標より小さくなれば止める
+                    if (char.positionY + 90 < y) {
+                        clearInterval(timerId);
+                        gameManager.addGoal(index)
+                        if (gameManager.expect === gameManager.goal) {
+                            result.innerHTML = "当たり！！"
+                        } else {
+                            result.innerHTML = "ハズレ！！"
+                        }
+                    }
 
-  document.getElementById('racer').appendChild(x)
+                })
 
-  console.log(x)
-})
-}
-// 再初期化
-function init() {
-    const racer = gameManager.racerList;
-    console.log()
-    result.innerHTML = ""
-    racer.forEach( (racer, index) => {
-        racer.positionY = 680
+                //racerListオブジェクト再代入
+                gameManager.racerList.length = 0
+                setRacerGroup()
 
-        switch(index) {
-            case 0:
-            racer.positionX = 450;
-            break;
-            case 1:
-            racer.positionX = 650;
-            break;
-            case 2:
-            racer.positionX = 850;
-            break;
-            default:
-            console.log('switch失敗');
+                // 再描画
+                const chars = gameManager.racerList;
+                appendImg(chars)
+
+            }, 100)
         }
-    })
-    // オブジェクト削除
-    clearObj();
+        // 描画関数
+        function appendImg(chars) {
 
-    //racerListオブジェクト再代入
-    gameManager.racerList.length = 0
-    setRacerGroup()
+            chars.forEach(char => {
 
-    // 再描画
-    const chars = gameManager.racerList;
-    appendImg(chars)
-}
-function clearObj() {
-    var top = document.getElementById('racer');
+                let x = document.createElement('img');
 
-    // 描画された要素削除・クリア
-    while (top.firstChild) {
-      top.removeChild(top.firstChild);
-    }
-}
-function setRacerGroup() {
-    gameManager.addRacer(racer1)
-    gameManager.addRacer(racer2)
-    gameManager.addRacer(racer3)
-}
-</script>
+                x.src = char.src;
+                x.style.width = "100px"
+                x.style.height = "100px"
+                x.style.marginRight = "20px"
+                x.style.position = "absolute"
+                x.style.top = char.positionY + "px";
+                x.style.left = char.positionX + "px";
+                x.style.zIndex = 2;
+
+                document.getElementById('racer').appendChild(x)
+
+                console.log(x)
+            })
+        }
+        // 再初期化
+        function init() {
+            const racer = gameManager.racerList;
+            console.log()
+            result.innerHTML = ""
+            racer.forEach((racer, index) => {
+                racer.positionY = 680
+
+                switch (index) {
+                    case 0:
+                        racer.positionX = 450;
+                        break;
+                    case 1:
+                        racer.positionX = 650;
+                        break;
+                    case 2:
+                        racer.positionX = 850;
+                        break;
+                    default:
+                        console.log('switch失敗');
+                }
+            })
+            // オブジェクト削除
+            clearObj();
+
+            //racerListオブジェクト再代入
+            gameManager.racerList.length = 0
+            setRacerGroup()
+
+            // 再描画
+            const chars = gameManager.racerList;
+            appendImg(chars)
+        }
+        function clearObj() {
+            var top = document.getElementById('racer');
+
+            // 描画された要素削除・クリア
+            while (top.firstChild) {
+                top.removeChild(top.firstChild);
+            }
+        }
+        function setRacerGroup() {
+            gameManager.addRacer(racer1)
+            gameManager.addRacer(racer2)
+            gameManager.addRacer(racer3)
+        }
+    </script>
 </body>
+
 </html>
